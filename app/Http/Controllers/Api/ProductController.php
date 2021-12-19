@@ -3,18 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class ProductController extends Controller
 {
 
-    private $category;
+    private $product;
 
-    public function __construct(Category $category)
+    public function __construct(Product $product )
     {
-        $this->category = $category;
+        $this->product = $product;
     }
+
 
     /**
      * Display a listing of the resource.
@@ -23,7 +24,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return $this->category->get();
+        return $this->product->get();
     }
 
     /**
@@ -34,8 +35,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        // Verificar se o nome é diferente de vazio
-        return $this->category->create($request->all());
+        return $this->product->create($request->all());
     }
 
     /**
@@ -46,12 +46,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //return $this->category->where('id', $id)
-        //                     ->get();
-
-        // print_r($this->category->find($id));
-
-        return $this->category->find($id);
+        return $this->product->find($id);
     }
 
     /**
@@ -63,13 +58,16 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $category = $this->category->find($id);
+        $product = $this->product->find($id);
 
-        $category->name = $request->name;
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->category_id = $request->category_id;
 
-        $category->save();
+        $product->save();
 
-        return $category;
+        return $product;
     }
 
     /**
@@ -80,14 +78,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        /**
-         * Adicionar verificação de existência de produtos
-         * Apagar produtos que são dessa categoria
-         *
-         */
-
-        $category = $this->category->find($id);
-        
-        return $category->delete();
+        $product = $this->product->find($id);
+        return $product->delete();
     }
 }

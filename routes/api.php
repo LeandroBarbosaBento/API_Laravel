@@ -25,3 +25,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
  */
 Route::apiResource('categories',  \App\Http\Controllers\Api\CategoryController::class);
 
+/**
+ * Create all the routes for Product
+ *
+ * Run "php artisan route:list" to see all
+ */
+Route::apiResource('products',  \App\Http\Controllers\Api\ProductController::class);
+
