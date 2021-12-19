@@ -4,16 +4,19 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
 
     private $product;
+    private $category;
 
-    public function __construct(Product $product )
+    public function __construct(Product $product, Category $category)
     {
         $this->product = $product;
+        $this->category = $category;
     }
 
 
@@ -24,7 +27,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return $this->product->get();
+        return [
+            "data" => $this->product->get()
+        ];
     }
 
     /**
@@ -35,7 +40,36 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->product->create($request->all());
+        if($request->filled('name') && $request->filled('description') && $request->filled('price') && $request->filled('category_id'))
+        {
+            if($this->category->find($request->category_id)){
+
+                $product = $this->product->create($request->all());
+
+                $data = [
+                    "status" => "sucesso",
+                    "data"   => $product
+                ];
+
+            }
+            else{
+
+                $data = [
+                    "status" => "error",
+                    "data"   => "Category not found."
+                ];
+
+            }
+
+        }
+        else{
+            $data = [
+                "status" => "error",
+                "message" => "All fields required."
+            ];
+        }
+
+        return $data;
     }
 
     /**
@@ -46,7 +80,19 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        return $this->product->find($id);
+        if($this->product->find($id)){
+            $data = [
+                "status" => "success",
+                "data"   => $this->product->find($id)
+            ];
+        }
+        else{
+            $data = [
+                "status"  => "error",
+                "message" => "Product not found!"
+            ];
+        }
+        return $data;
     }
 
     /**
@@ -60,14 +106,45 @@ class ProductController extends Controller
     {
         $product = $this->product->find($id);
 
-        $product->name = $request->name;
-        $product->description = $request->description;
-        $product->price = $request->price;
-        $product->category_id = $request->category_id;
+        if($request->filled('name') && $request->filled('description') && $request->filled('price') && $request->filled('category_id')){
+            
+            if($product){
 
-        $product->save();
+                if($this->category->find($request->category_id)){
 
-        return $product;
+                    $product->name = $request->name;
+                    $product->description = $request->description;
+                    $product->price = $request->price;
+                    $product->category_id = $request->category_id;
+
+                    $product->save();
+
+                    $data = [
+                        "status" => "success",
+                        "data"   => $product
+                    ];
+                } else {
+                    $data = [
+                        "status" => "error",
+                        "data"   => "Category not found."
+                    ];
+                }
+            }
+            else {
+                $data = [
+                    "status"  => "error",
+                    "message" => "Product not found."
+                ];
+            }
+        }
+        else {
+            $data = [
+                "status"  => "error",
+                "message" => "All fields required."
+            ];
+        }
+
+        return $data;
     }
 
     /**
@@ -79,6 +156,19 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = $this->product->find($id);
-        return $product->delete();
+        if($product){
+            $product->delete();
+            $data = [
+                "status"  => "success",
+                "message" => "Product deleted."
+            ];
+        }
+        else {
+            $data = [
+                "status"  => "error",
+                "message" => "Product not found."
+            ];
+        }
+        return $data ;
     }
 }

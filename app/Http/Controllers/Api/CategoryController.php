@@ -4,16 +4,19 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
 
     private $category;
+    private $product;
 
-    public function __construct(Category $category)
+    public function __construct(Category $category, Product $product)
     {
         $this->category = $category;
+        $this->product = $product;
     }
 
     /**
@@ -23,7 +26,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return $this->category->get();
+        return ["data" => $this->category->get()];
     }
 
     /**
@@ -34,8 +37,20 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        // Verificar se o nome é diferente de vazio
-        return $this->category->create($request->all());
+        if($request->filled('name')){
+            $category = $this->category->create($request->all());
+            $data = [
+                "status" => "success",
+                "data"   => $category
+            ];
+        }
+        else {
+            $data = [
+                "status" => "error",
+                "data"   => "All fields required."
+            ];
+        }
+        return $data ;
     }
 
     /**
@@ -46,12 +61,24 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //return $this->category->where('id', $id)
-        //                     ->get();
 
-        // print_r($this->category->find($id));
+        $category = $this->category->find($id);
 
-        return $this->category->find($id);
+        if($category){
+            $data = [
+                "status" => "success",
+                "data"   => $category
+            ];
+        }
+        else{
+            $data = [
+                "status" => "error",
+                "data"   => "Category not found."
+            ];
+        }
+
+        return $data;
+
     }
 
     /**
@@ -63,13 +90,33 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $category = $this->category->find($id);
+        if($request->filled('name')){
 
-        $category->name = $request->name;
+            $category = $this->category->find($id);
 
-        $category->save();
+            if($category){
+                $category->name = $request->name;
+                $category->save();
+                $data = [
+                    "status" => "success",
+                    "data"   => $category
+                ];
+            }
+            else{
+                $data = [
+                    "status" => "error",
+                    "data"   => "Category not found."
+                ];
+            }
+        }
+        else{
+            $data = [
+                "status" => "error",
+                "data"   => "All fields required."
+            ];
+        }
 
-        return $category;
+        return $data;
     }
 
     /**
@@ -87,7 +134,26 @@ class CategoryController extends Controller
          */
 
         $category = $this->category->find($id);
-        
-        return $category->delete();
+
+        if($category){
+
+            $this->product->where('category_id', $id)->delete();
+
+            $category->delete();
+
+            $data = [
+                "status"  => "success",
+                "message" => "Category deleted."
+            ];
+
+        }
+        else{
+            $data = [
+                "status"  => "error",
+                "message" => "Category not found."
+            ];
+        }
+
+        return $data;
     }
 }
