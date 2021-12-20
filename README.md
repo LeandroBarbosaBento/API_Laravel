@@ -1,19 +1,19 @@
 # API using Laravel 8
 
-### Running the project
+### Iniciando o projeto
 
-- run "composer require doctrine/dbal" in the terminal before running the migrations
+- executar "composer require doctrine/dbal" no terminal antes de executar as migrations
 
-- run "php artisan migrate"
+- executar "php artisan migrate" para rodas as migrations
 
-- Optional: run "php artisan db:seed" to populate the database with fake data
+- Opcional: executar "php artisan db:seed" para popular o bando de dados com dados fake. 
 
 ### Documentation
 
-- The documentation is made using Postman and can be found in this [link (click)](https://documenter.getpostman.com/view/16555958/UVRBkkUq). 
+- A documentação foi feita utilizando o [Postman](https://www.postman.com/) e pode ser encontrada [neste link (click)](https://documenter.getpostman.com/view/16555958/UVRBkkUq). 
 
-- There are exemples for all the routes, it can be seen in the darker boxes. In the upper right corner of these boxes there is an arrow with more example options.
+- Há exemplos do funcionamento em todas as rotas nas caixas mais escuras do link. No canto superior dessas caixas pode haver uma seta, o que indica que há mais exemplos de request. 
 
-- The "get_juros" route is not working properly yet.
+- A rota "api/get_juros" não está funcionando corretamente (problemas com escopo de variável - corrigir futuramente). 
 
 
