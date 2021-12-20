@@ -32,3 +32,5 @@ Route::apiResource('categories',  \App\Http\Controllers\Api\CategoryController::
  */
 Route::apiResource('products',  \App\Http\Controllers\Api\ProductController::class);
 
+Route::post('products/get_juros/{product}', [\App\Http\Controllers\Api\ProductController::class, 'get_juros']);
+

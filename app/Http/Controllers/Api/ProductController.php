@@ -171,4 +171,49 @@ class ProductController extends Controller
         }
         return $data ;
     }
+
+    public function get_juros(Request $request, $id)
+    {
+        $product = $this->product->find($id);
+
+        if($request->filled('months')){
+            if($product){
+
+                $juros = 0;
+
+                $category = $this->category->find($product->category_id);
+
+                switch ($category->nome) {
+                    case "Informática":
+                        $juros = $product->price*0.05;
+                        break;
+                    case "Automotivo":
+                        $juros = $product->price*0.025;
+                        break;
+                    case "Móveis":
+                        $juros = $product->price*0.01;
+                        break;
+                }
+
+                $data = [
+                    "status" => "success",
+                    "price"  => ($product->price + $juros) / $request->months
+                ];
+            }
+            else{
+                $data = [
+                    "status"  => "error",
+                    "message" => "Product not found."
+                ];
+            }
+        }
+        else {
+            $data = [
+                "status"  => "error",
+                "message" => "All fields required."
+            ];
+        }
+
+        return $data;
+    }
 }
