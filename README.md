@@ -16,4 +16,4 @@
 
 - A rota "api/get_juros" não está funcionando corretamente (problemas com escopo de variável - corrigir futuramente). 
 
-
+- O arquivo **data-dump.sql** é o dump do banco de dados.
