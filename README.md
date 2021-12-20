@@ -4,7 +4,7 @@
 
 - executar "composer require doctrine/dbal" no terminal antes de executar as migrations
 
-- executar "php artisan migrate" para rodas as migrations
+- executar "php artisan migrate" para rodar as migrations
 
 - Opcional: executar "php artisan db:seed" para popular o bando de dados com dados fake. 
 
