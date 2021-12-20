@@ -47,7 +47,7 @@ class ProductController extends Controller
                 $product = $this->product->create($request->all());
 
                 $data = [
-                    "status" => "sucesso",
+                    "status" => "sucess",
                     "data"   => $product
                 ];
 
@@ -107,7 +107,7 @@ class ProductController extends Controller
         $product = $this->product->find($id);
 
         if($request->filled('name') && $request->filled('description') && $request->filled('price') && $request->filled('category_id')){
-            
+
             if($product){
 
                 if($this->category->find($request->category_id)){
